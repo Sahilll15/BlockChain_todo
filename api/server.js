@@ -19,6 +19,7 @@ const contract = new web3.eth.Contract(ABI, contractAddress);
 
 console.log(contract.methods);
 
+
 // const viewTask = async () => {
 //     const task = await contract.methods.viewTask(1).call();
 //     return task;
@@ -72,15 +73,35 @@ app.get('/api/etherum/view-all-tasks', async (req, res) => {
 }
 )
 
+const dateClashCheck = async (taskDate) => {
+    const tasks = await contract.methods.allTasks().call()
+    const taskArray = tasks.map((task) => {
+        const { id, name, date } = task;
+        const numId = Number(id);
+        const taskObj = {
+            id: numId,
+            name,
+            date
+        }
+        return taskObj;
+    })
+    const dateArray = taskArray.map((task) => task.date);
+    const dateClash = dateArray.includes(taskDate);
+    return dateClash;
+}
+
 
 app.post('/api/etherum/createTask', async (req, res) => {
+
     try {
-
-
-        const task = await contract.methods.createTask('taskName', '10/20/30').send({ from: process.env.PUBLIC_KEY })
-        console.log(task)
-        res.status(201).json({ status: 201, message: "Task created successfully." })
-
+        const { date } = req.body;
+        const dateClash = await dateClashCheck(date);
+        if (dateClash) {
+            res.status(400).json({ status: 400, message: "date clash" })
+        }
+        else {
+            res.status(200).json({ message: "task can be added " })
+        }
     } catch (error) {
         console.error(error)
     }

@@ -8,7 +8,7 @@ import ViewTask from './pages/ViewTask';
 import Wallet from './pages/Wallet';
 import DeleteTask from './pages/DeleteTask';
 import Updatetask from './pages/Updatetask';
-
+import Navigation from './pages/Navigation';
 function App() {
   const [state, setState] = useState({
     web3: null,
@@ -27,10 +27,11 @@ function App() {
   return (
     <div className='App ' style={{ margin: '10px' }}>
       <Router>
+        <Navigation />
         <Routes>
           <Route path="/" element={<ViewAllTask />} />
           <Route path="/create" element={<CreateTask state={state} />} />
-          <Route path="/view/:id" element={<ViewTask />} />
+          <Route path="/view" element={<ViewTask />} />
           <Route path="/delete/:id" element={<DeleteTask state={state} />} />
           <Route path="/update/:id" element={<Updatetask state={state} />} />
           <Route path="/wallet" element={<Wallet saveState={saveState} />} />

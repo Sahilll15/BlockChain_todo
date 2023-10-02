@@ -12,7 +12,7 @@ const ViewAllTask = () => {
             console.log(response.data)
 
             if (response.status === 200) {
-                setTask(response.data)
+                setTask(response.data.taskArray)
             }
             else {
                 console.log("error")
@@ -25,10 +25,23 @@ const ViewAllTask = () => {
 
     useEffect(() => {
         viewTask();
+        console.log('tasks' + tasks);
     }, [])
 
     return (
-        <div>ViewAllTask</div>
+        <div>
+            <h1>Task From The BlockChain</h1>
+            {
+                tasks.map((task) => {
+                    return (
+                        <div>
+                            <h1>{task.name}</h1>
+
+                        </div>
+                    )
+                })
+            }
+        </div>
     )
 }
 
